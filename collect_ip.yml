@@ -1,0 +1,16 @@
+---
+
+- name: ip address
+  hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create a dir
+      file:
+        path: /opt/ipdir
+        state: directory
+
+    - name: copy ip address
+      copy:
+        dest: /opt/ipdir/ip_list
+        content: "IPADDR={{ lookup('file', 'ip.yml').split() | ipaddr| unique| join(',')| default('none', true) }}"
